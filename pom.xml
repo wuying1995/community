@@ -110,6 +110,24 @@
             <version>3.9</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+            <scope>true</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.3.7</version>
+        </dependency>
+
+
+
+
     </dependencies>
 
     <build>
@@ -119,23 +137,14 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-<!--            <plugin>-->
-<!--                <groupId>org.flywaydb</groupId>-->
-<!--                <artifactId>flyway-maven-plugin</artifactId>-->
-<!--                <version>5.2.4</version>-->
-<!--                <configuration>-->
-<!--                    <url>jdbc:h2:~/Desktop/outWORK/community</url>-->
-<!--                    <user>sa</user>-->
-<!--                    <password>123</password>-->
-<!--                </configuration>-->
-<!--                <dependencies>-->
-<!--                    <dependency>-->
-<!--                        <groupId>com.h2database</groupId>-->
-<!--                        <artifactId>h2</artifactId>-->
-<!--                        <version>1.4.200</version>-->
-<!--                    </dependency>-->
-<!--                </dependencies>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!--fork:如果没有该项配置,整个devtools不会起作用-->
+                    <fork>true</fork>
+                </configuration>
+            </plugin>
 
         </plugins>
     </build>

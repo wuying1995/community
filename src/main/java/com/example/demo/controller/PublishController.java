@@ -59,6 +59,8 @@ public class PublishController {
             return "publish";
         }
 
+        System.out.println("wwddddd");
+
         User user = null;
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {

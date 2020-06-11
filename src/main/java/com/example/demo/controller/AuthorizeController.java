@@ -55,6 +55,7 @@ public class AuthorizeController {
             user1.setAccountId(String.valueOf(user.getId()));
             user1.setGmtCreate(System.currentTimeMillis());
             user1.setGmtModified(user1.getGmtCreate());
+            user1.setBio(user1.getBio());
             userMapper.insert(user1);
 
             request.getSession().setAttribute("user",user);

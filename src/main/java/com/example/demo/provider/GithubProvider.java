@@ -18,8 +18,6 @@ public class GithubProvider {
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
 
-        // socket timeout
-
         RequestBody body = RequestBody.create(mediaType, JSON.toJSONString(accessTokenDTO));
         Request request = new Request.Builder()
                 .url("https://github.com/login/oauth/access_token?client_id=" + accessTokenDTO.getClient_id() + "&client_secret=" + accessTokenDTO.getClient_secret() + "&code=" + accessTokenDTO.getCode() + "&redirect_uri=" + accessTokenDTO.getRedirect_uri() + "&state=" + accessTokenDTO.getState())

@@ -15,49 +15,49 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class GithubProvider {
 
-//
-//    public String getAccessToken(AccessTokenDTO accessTokenDTO) {
-//        MediaType mediaType = MediaType.get("application/json; charset=utf-8");
-//        OkHttpClient client = new OkHttpClient();
-//
-//        RequestBody body = RequestBody.create(mediaType, JSON.toJSONString(accessTokenDTO));
-//        Request request = new Request.Builder()
-//                .url("https://github.com/login/oauth/access_token?client_id=" + accessTokenDTO.getClient_id() + "&client_secret=" + accessTokenDTO.getClient_secret() + "&code=" + accessTokenDTO.getCode() + "&redirect_uri=" + accessTokenDTO.getRedirect_uri() + "&state=" + accessTokenDTO.getState())
-//                .post(body)
-//                .build();
-//        try {
-//            Response response = client.newCall(request).execute();
-//            String string = response.body().string();
-//            String token = string.split("&")[0].split("=")[1];
-//            return token;
-//        } catch (Exception e) {
-//            log.error("getAccessToken error,{}", accessTokenDTO, e);
-//        }
-//        return null;
-//    }
+
+    public String getAccessToken(AccessTokenDTO accessTokenDTO) {
+        MediaType mediaType = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody body = RequestBody.create(mediaType, JSON.toJSONString(accessTokenDTO));
+        Request request = new Request.Builder()
+                .url("https://github.com/login/oauth/access_token?client_id=" + accessTokenDTO.getClient_id() + "&client_secret=" + accessTokenDTO.getClient_secret() + "&code=" + accessTokenDTO.getCode() + "&redirect_uri=" + accessTokenDTO.getRedirect_uri() + "&state=" + accessTokenDTO.getState())
+                .post(body)
+                .build();
+        try {
+            Response response = client.newCall(request).execute();
+            String string = response.body().string();
+            String token = string.split("&")[0].split("=")[1];
+            return token;
+        } catch (Exception e) {
+            log.error("getAccessToken error,{}", accessTokenDTO, e);
+        }
+        return null;
+    }
 
     //hutool
 
 
-    public String getAccessToken(AccessTokenDTO accessTokenDTO) {
-
-        String url = "https://github.com/login/oauth/access_token?client_id=" + accessTokenDTO.getClient_id() + "&client_secret=" + accessTokenDTO.getClient_secret() + "&code=" + accessTokenDTO.getCode() + "&redirect_uri=" + accessTokenDTO.getRedirect_uri() + "&state=" + accessTokenDTO.getState();
-
-        //链式构建请求
-        String result2 = HttpRequest.post(url)
-                .header(Header.USER_AGENT, "Hutool http")//头信息，多个头信息多次调用此方法即可
-                .body(JSON.toJSONString(accessTokenDTO))//表单内容
-                .timeout(20000)//超时，毫秒
-                .execute()
-                .body();
-
-        String token = result2.split("&")[0].split("=")[1];
-
-        return token;
-
-
-    }
-
+//    public String getAccessToken(AccessTokenDTO accessTokenDTO) {
+//
+//        String url = "https://github.com/login/oauth/access_token?client_id=" + accessTokenDTO.getClient_id() + "&client_secret=" + accessTokenDTO.getClient_secret() + "&code=" + accessTokenDTO.getCode() + "&redirect_uri=" + accessTokenDTO.getRedirect_uri() + "&state=" + accessTokenDTO.getState();
+//
+//        //链式构建请求
+//        String result2 = HttpRequest.post(url)
+//                .header(Header.USER_AGENT, "Hutool http")//头信息，多个头信息多次调用此方法即可
+//                .body(JSON.toJSONString(accessTokenDTO))//表单内容
+//                .timeout(20000)//超时，毫秒
+//                .execute()
+//                .body();
+//
+//        String token = result2.split("&")[0].split("=")[1];
+//
+//        return token;
+//
+//
+//    }
+//
 
     public GithubUser getUser(String accessToken) {
         OkHttpClient client = new OkHttpClient();

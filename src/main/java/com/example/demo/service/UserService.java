@@ -3,8 +3,11 @@ package com.example.demo.service;
 
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.User;
+import com.example.demo.model.UserExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -13,24 +16,29 @@ public class UserService {
     private UserMapper userMapper;
 
 
-    public void createOrUpdate(User user1) {
+    public void createOrUpdate(User user) {
 
-        User dbuser= userMapper.findByAccountId(user1.getAccountId());
-
-        if (dbuser==null){
-
-            user1.setGmtCreate(System.currentTimeMillis());
-            user1.setGmtModified(user1.getGmtCreate());
-
-            userMapper.insert(user1);
-        }else {
-
-            user1.setGmtModified(user1.getGmtCreate());
-            dbuser.setAvatarUrl(user1.getAvatarUrl());
-            dbuser.setName(user1.getName());
-            dbuser.setToken(user1.getToken());
-            userMapper.update(dbuser);
-
+        UserExample userExample = new UserExample();
+        userExample.createCriteria()
+                .andAccountIdEqualTo(user.getAccountId());
+        List<User> users = userMapper.selectByExample(userExample);
+        if (users.size() == 0) {
+            // 插入
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setGmtModified(user.getGmtCreate());
+            userMapper.insert(user);
+        } else {
+            //更新
+            User dbUser = users.get(0);
+            User updateUser = new User();
+            updateUser.setGmtModified(System.currentTimeMillis());
+            updateUser.setAvatarUrl(user.getAvatarUrl());
+            updateUser.setName(user.getName());
+            updateUser.setToken(user.getToken());
+            UserExample example = new UserExample();
+            example.createCriteria()
+                    .andIdEqualTo(dbUser.getId());
+            userMapper.updateByExampleSelective(updateUser, example);
         }
 
 

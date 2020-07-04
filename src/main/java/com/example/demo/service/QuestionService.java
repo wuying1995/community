@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dto.QuestionDto;
 import com.example.demo.exception.CustomizeErrorCode;
 import com.example.demo.exception.CustomizeException;
+import com.example.demo.mapper.QuestionExtMapper;
 import com.example.demo.mapper.QuestionMapper;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.Question;
@@ -25,8 +26,12 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
+
     public List<QuestionDto> list() {
-        List<Question> questions = questionMapper.selectByExample(new QuestionExample());
+
+        List<Question> questions = questionMapper.selectByExampleWithBLOBs(new QuestionExample());
         List<QuestionDto> questionDtos = new ArrayList<>();
         for (Question question : questions) {
             User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -47,7 +52,6 @@ public class QuestionService {
 
             throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
-
 
         QuestionDto questionDto = new QuestionDto();
         BeanUtils.copyProperties(question, questionDto);
@@ -83,5 +87,12 @@ public class QuestionService {
 
 
         }
+    }
+
+    public void incView(Integer id) {
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.incView(question);
     }
 }

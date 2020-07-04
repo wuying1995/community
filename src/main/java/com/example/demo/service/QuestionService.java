@@ -37,7 +37,28 @@ public class QuestionService {
         return questionDtos;
     }
 
+    public QuestionDto getById(Integer id) {
+        Question question = questionMapper.getById(id);
 
-    public void list(Long id, Integer page, Integer size) {
+        QuestionDto questionDto = new QuestionDto();
+        BeanUtils.copyProperties(question, questionDto);
+        User user = userMapper.findById(question.getCreator());
+        questionDto.setUser(user);
+        return questionDto;
+    }
+
+    public void createOrUpdate(Question question) {
+        if (question.getId()==null){
+
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModified(question.getGmtCreate());
+            question.setViewCount(0);
+            question.setLikeCount(0);
+            question.setCommentCount(0);
+            questionMapper.create(question);
+        }else {
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.update(question);
+        }
     }
 }

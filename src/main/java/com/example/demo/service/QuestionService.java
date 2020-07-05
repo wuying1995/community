@@ -45,7 +45,7 @@ public class QuestionService {
         return questionDtos;
     }
 
-    public QuestionDto getById(Integer id) {
+    public QuestionDto getById(Long id) {
         Question question = questionMapper.selectByPrimaryKey(id);
 
         if (question==null){
@@ -61,6 +61,7 @@ public class QuestionService {
     }
 
     public void createOrUpdate(Question question) {
+
         if (question.getId()==null){
 
             question.setGmtCreate(System.currentTimeMillis());
@@ -89,7 +90,7 @@ public class QuestionService {
         }
     }
 
-    public void incView(Integer id) {
+    public void incView(Long id) {
         Question question = new Question();
         question.setId(id);
         question.setViewCount(1);

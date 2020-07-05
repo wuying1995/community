@@ -3,20 +3,19 @@ package com.example.demo.dto;
 import com.example.demo.model.User;
 import lombok.Data;
 
-
+/**
+ * Created by codedrinker on 2019/6/2.
+ */
 @Data
-public class QuestionDto {
+public class CommentDTO {
     private Long id;
-    private String title;
-    private String description;
-    private String tag;
+    private Long parentId;
+    private Integer type;
+    private Long commentator;
     private Long gmtCreate;
     private Long gmtModified;
-    private Long creator;
-    private Integer viewCount;
+    private Long likeCount;
     private Integer commentCount;
-    private Integer likeCount;
+    private String content;
     private User user;
-
-
 }

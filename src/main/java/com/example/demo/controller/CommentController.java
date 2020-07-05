@@ -6,6 +6,7 @@ import com.example.demo.exception.CustomizeErrorCode;
 import com.example.demo.model.Comment;
 import com.example.demo.model.User;
 
+import com.example.demo.service.CommentService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +28,9 @@ public class CommentController {
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
     public Object post(@RequestBody CommentCreateDTO commentCreateDTO,
                        HttpServletRequest request) {
+
         User user = (User) request.getSession().getAttribute("user");
+
         if (user == null) {
             return ResultDTO.errorOf(CustomizeErrorCode.NO_LOGIN);
         }
@@ -48,10 +51,10 @@ public class CommentController {
         return ResultDTO.okOf();
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET)
-    public ResultDTO<List<CommentDTO>> comments(@PathVariable(name = "id") Long id) {
-        List<CommentDTO> commentDTOS = commentService.listByTargetId(id, CommentTypeEnum.COMMENT);
-        return ResultDTO.okOf(commentDTOS);
-    }
+//    @ResponseBody
+//    @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET)
+//    public ResultDTO<List<CommentDTO>> comments(@PathVariable(name = "id") Long id) {
+//        List<CommentDTO> commentDTOS = commentService.listByTargetId(id, CommentTypeEnum.COMMENT);
+//        return ResultDTO.okOf(commentDTOS);
+//    }
 }

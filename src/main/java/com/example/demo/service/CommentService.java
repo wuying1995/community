@@ -6,10 +6,7 @@ import com.example.demo.dto.CommentDTO;
 import com.example.demo.enums.CommentTypeEnum;
 import com.example.demo.exception.CustomizeErrorCode;
 import com.example.demo.exception.CustomizeException;
-import com.example.demo.mapper.CommentMapper;
-import com.example.demo.mapper.QuestionExtMapper;
-import com.example.demo.mapper.QuestionMapper;
-import com.example.demo.mapper.UserMapper;
+import com.example.demo.mapper.*;
 import com.example.demo.model.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +35,10 @@ public class CommentService {
     private QuestionExtMapper questionExtMapper;
 
     @Autowired
+    private CommentExtMapper commentExtMapper;
+
+
+    @Autowired
     private UserMapper userMapper;
 
     @Transactional
@@ -52,22 +53,34 @@ public class CommentService {
 
         if (comment.getType()==CommentTypeEnum.COMMENT.getType()){
             //回复评论
-            Comment dbcomment1 = commentMapper.selectByPrimaryKey(comment.getParentId());
-            if (dbcomment1==null){
-                throw new CustomizeException(CustomizeErrorCode.TYPE_PARAM_WRONG);
+            Comment dbComment = commentMapper.selectByPrimaryKey(comment.getParentId());
+            if (dbComment == null) {
+                throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
+
+            // 回复问题
+            Question question = questionMapper.selectByPrimaryKey(dbComment.getParentId());
+            if (question == null) {
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
+
             commentMapper.insert(comment);
+
+            // 增加评论数
+            Comment parentComment = new Comment();
+            parentComment.setId(comment.getParentId());
+            parentComment.setCommentCount(1);
+            commentExtMapper.incCommentCount(parentComment);
 
         }else{
             //回复问题
-
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
-            if (question==null) {
-                throw new CustomizeException(CustomizeErrorCode.TYPE_PARAM_WRONG);
+            if (question == null) {
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
+            comment.setCommentCount(0);
             commentMapper.insert(comment);
-
-            comment.setCommentCount(1);
+            question.setCommentCount(1);
             questionExtMapper.incCommentCount(question);
 
         }

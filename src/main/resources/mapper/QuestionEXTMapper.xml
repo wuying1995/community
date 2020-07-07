@@ -20,12 +20,27 @@
     where id = #{id}
    </update>
 
+
   <update id="incCommentCount" parameterType="com.example.demo.model.Question">
     update QUESTION
     set
     COMMENT_COUNT = COMMENT_COUNT + #{commentCount,jdbcType=INTEGER}
     where id = #{id}
     </update>
+
+
+  <select id="selectRelated" parameterType="com.example.demo.model.Question" resultMap="BaseResultMap">
+    select * from QUESTION
+    <where>
+      <if test="id != null">
+        and id != #{id}
+      </if>
+      <if test="tag != null and tag != ''">
+        and tag regexp #{tag}
+      </if>
+    </where>
+    order by gmt_create desc limit 20
+  </select>
 
 
 </mapper>

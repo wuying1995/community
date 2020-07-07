@@ -33,8 +33,6 @@ public class AuthorizeController {
     @Value("${Client_secret}")
     private String Client_secret;
 
-    @Autowired
-    private UserMapper userMapper;
 
     @Autowired
     private UserService userService;
